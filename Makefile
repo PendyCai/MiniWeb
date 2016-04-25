@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS=-O2 -march=pentium2 -fomit-frame-pointer
+CC?=gcc
+CFLAGS?=-O2 -march=pentium2 -fomit-frame-pointer
 HTTPOBJ = httppil.o http.o
 HEADERS = httpint.h httpapi.h
 ifndef TARGET
@@ -36,12 +36,12 @@ endif
 
 ifdef WINDIR
 DEFINES= -DWIN32
-LDFLAGS = -lws2_32
+LDFLAGS += -lws2_32
 OS="Win32"
 else
 #CFLAGS+= -fPIC
 ifdef THREAD
-LDFLAGS = -lpthread
+LDFLAGS += -lpthread
 endif
 OS="Linux"
 endif
