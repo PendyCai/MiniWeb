@@ -100,7 +100,7 @@ int mwServerStart(HttpParam* hp)
 		return -1;
 	}
 
-	{
+	if (hp->pxUrlHandler) {
 		int i;
 		for (i=0;(hp->pxUrlHandler+i)->pchUrlPrefix;i++) {
 			if ((hp->pxUrlHandler+i)->pfnEventHandler &&
@@ -152,9 +152,11 @@ int mwServerShutdown(HttpParam* hp)
 	// and wait for thread to exit
 	for (i=0;hp->bWebserverRunning && i<10;i++) msleep(100);
 
-	for (i=0;(hp->pxUrlHandler+i)->pchUrlPrefix;i++) {
-		if ((hp->pxUrlHandler+i)->pfnUrlHandler && (hp->pxUrlHandler+i)->pfnEventHandler)
-			(hp->pxUrlHandler+i)->pfnEventHandler(MW_UNINIT, hp);
+	if (hp->pxUrlHandler) {
+		for (i=0;(hp->pxUrlHandler+i)->pchUrlPrefix;i++) {
+			if ((hp->pxUrlHandler+i)->pfnUrlHandler && (hp->pxUrlHandler+i)->pfnEventHandler)
+				(hp->pxUrlHandler+i)->pfnEventHandler(MW_UNINIT, hp);
+		}
 	}
 
 	UninitSocket();
@@ -588,7 +590,7 @@ int _mwCheckUrlHandlers(HttpParam* hp, HttpSocket* phsSocket)
 	int ret=0;
 
 	up.pxVars=NULL;
-	for (puh=hp->pxUrlHandler; puh->pchUrlPrefix; puh++) {
+	for (puh=hp->pxUrlHandler; puh && puh->pchUrlPrefix; puh++) {
 		int iPrefixLen=strlen(puh->pchUrlPrefix);
 		if (puh->pfnUrlHandler && !strncmp(phsSocket->request.pucPath,puh->pchUrlPrefix,iPrefixLen)) {
 			//URL prefix matches
@@ -752,7 +754,7 @@ int _mwProcessReadSocket(HttpParam* hp, HttpSocket* phsSocket)
                     phsSocket->pucData=dump_buffer;
 		      phsSocket->iDataLength= sizeof(dump_buffer);
               }
-		else if (hp->pxUrlHandler) {
+		else if (/*hp->pxUrlHandler*/1) {
 			if (!_mwCheckUrlHandlers(hp,phsSocket))
 				SETFLAG(phsSocket,FLAG_DATA_FILE);
 		}
