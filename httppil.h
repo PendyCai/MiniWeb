@@ -40,7 +40,7 @@ typedef HANDLE pthread_mutex_t;
 #define TRUE 1
 
 typedef int SOCKET;
-typedef unsigned long DWORD;
+typedef unsigned int DWORD;
 typedef unsigned short int WORD;
 typedef unsigned char BYTE;
 typedef int BOOL;

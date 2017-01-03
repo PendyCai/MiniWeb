@@ -1,5 +1,6 @@
 CC?=gcc
-CFLAGS?=-O2 -march=pentium2 -fomit-frame-pointer
+CFLAGS?=-O2 -m32 #-march=pentium2 -fomit-frame-pointer
+LDFLAGS?=-m32
 HTTPOBJ = httppil.o http.o
 HEADERS = httpint.h httpapi.h
 ifndef TARGET
