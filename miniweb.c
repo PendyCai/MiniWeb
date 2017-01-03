@@ -127,7 +127,7 @@ void saveWebCounter()
 	int fd;
 	if (!pchCounterFile) return;
 	printf("Saving counter data...\n");
-	fd=open(pchCounterFile,O_WRONLY|O_CREAT);
+	fd=open(pchCounterFile,O_WRONLY|O_CREAT,S_IRWXU|S_IRWXG);
 	if (fd<=0) return;
 	write(fd,counter,sizeof(counter));
 	close(fd);
